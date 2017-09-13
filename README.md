@@ -2,6 +2,9 @@
 
 Three-valued logic based on Kleene's strong logic of indeterminacy.
 
+[![Build Status](https://travis-ci.org/mithrandie/ternary.svg?branch=master)](https://travis-ci.org/mithrandie/ternary)
+[![GoDoc](https://godoc.org/github.com/mithrandie/ternary?status.svg)](http://godoc.org/github.com/mithrandie/ternary)
+[![License: MIT](https://img.shields.io/badge/License-MIT-lightgrey.svg)](https://opensource.org/licenses/MIT)
 
 ## Truth values
 
