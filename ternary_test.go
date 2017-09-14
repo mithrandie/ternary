@@ -21,37 +21,37 @@ func TestValue_String(t *testing.T) {
 	}
 }
 
-func TestValue_BoolValue(t *testing.T) {
-	b := FALSE.BoolValue()
-	if b != false {
-		t.Errorf("bool value = %t, want %t for %s", b, false, FALSE)
-	}
-
-	b = UNKNOWN.BoolValue()
-	if b != false {
-		t.Errorf("bool value = %t, want %t for %s", b, false, UNKNOWN)
-	}
-
-	b = TRUE.BoolValue()
-	if b != true {
-		t.Errorf("bool value = %t, want %t for %s", b, true, TRUE)
-	}
-}
-
-func TestValue_IntValue(t *testing.T) {
-	i := FALSE.IntValue()
+func TestValue_Int(t *testing.T) {
+	i := FALSE.Int()
 	if i != -1 {
 		t.Errorf("int value = %d, want %d for %s", i, -1, FALSE)
 	}
 
-	i = UNKNOWN.IntValue()
+	i = UNKNOWN.Int()
 	if i != 0 {
 		t.Errorf("int value = %d, want %d for %s", i, 0, UNKNOWN)
 	}
 
-	i = TRUE.IntValue()
+	i = TRUE.Int()
 	if i != 1 {
 		t.Errorf("int value = %d, want %d for %s", i, 1, TRUE)
+	}
+}
+
+func TestValue_ParseBool(t *testing.T) {
+	b := FALSE.ParseBool()
+	if b != false {
+		t.Errorf("bool value = %t, want %t for %s", b, false, FALSE)
+	}
+
+	b = UNKNOWN.ParseBool()
+	if b != false {
+		t.Errorf("bool value = %t, want %t for %s", b, false, UNKNOWN)
+	}
+
+	b = TRUE.ParseBool()
+	if b != true {
+		t.Errorf("bool value = %t, want %t for %s", b, true, TRUE)
 	}
 }
 

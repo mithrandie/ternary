@@ -79,19 +79,22 @@ var literals = map[Value]string{
 	TRUE:    "TRUE",
 }
 
+// Returns string representation of the Value
 func (v Value) String() string {
 	return literals[v]
 }
 
-func (v Value) BoolValue() bool {
+// Returns integer representation of the Value
+func (v Value) Int() int64 {
+	return reflect.ValueOf(v).Int()
+}
+
+// Returns true if the Value is TRUE, otherwise returns false
+func (v Value) ParseBool() bool {
 	if v != TRUE {
 		return false
 	}
 	return true
-}
-
-func (v Value) IntValue() int64 {
-	return reflect.ValueOf(v).Int()
 }
 
 // Converts s to a ternary value.
