@@ -25,10 +25,10 @@ Three-valued logic based on Kleene's strong logic of indeterminacy.
   | T |  F |
   +---+----|
 
-  AND(A, B) - Minimum value of (A, B)
+  AND(A, B) - Logical conjunction. Minimum value of (A, B)
   +-------+-----------|
   |       |     B     |
-  +       +---+---+---|
+  |       |---+---+---|
   |       | F | U | T |
   +---+---+---+---+---|
   |   | F | F | F | F |
@@ -36,10 +36,10 @@ Three-valued logic based on Kleene's strong logic of indeterminacy.
   |   | T | F | U | T |
   +---+---+---+---+---|
 
-  OR(A, B) - Maximum value of (A, B)
+  OR(A, B) - Logical disjunction. Maximum value of (A, B)
   +-------+-----------|
   |       |     B     |
-  +       +---+---+---|
+  |       |---+---+---|
   |       | F | U | T |
   +---+---+---+---+---|
   |   | F | F | U | T |
@@ -47,10 +47,10 @@ Three-valued logic based on Kleene's strong logic of indeterminacy.
   |   | T | T | T | T |
   +---+---+---+---+---|
 
-  IMP(A, B) - NOT(A) OR B
+  IMP(A, B) - Logical implication. NOT(A) OR B
   +-------+-----------|
   |       |     B     |
-  +       +---+---+---|
+  |       |---+---+---|
   |       | F | U | T |
   +---+---+---+---+---|
   |   | F | T | U | F |
@@ -58,10 +58,10 @@ Three-valued logic based on Kleene's strong logic of indeterminacy.
   |   | T | T | T | T |
   +---+---+---+---+---|
 
-  EQV(A, B) - Equivalence
+  EQV(A, B) - Logical biconditional
   +-------+-----------|
   |       |     B     |
-  +       +---+---+---|
+  |       |---+---+---|
   |       | F | U | T |
   +---+---+---+---+---|
   |   | F | T | U | F |
