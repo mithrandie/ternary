@@ -12,58 +12,58 @@
 //
 // Truth tables
 /*
-  NOT(A) - Negation
-  +---+----|
+  NOT(A) - Logical negation
+  +---+----+
   | A | ¬A |
-  +---+----|
+  |---+----|
   | F |  T |
   | U |  U |
   | T |  F |
-  +---+----|
+  +---+----+
 
   AND(A, B) - Logical conjunction. Minimum value of (A, B)
-  +-------+-----------|
-  |       |     B     |
-  |       |---+---+---|
-  |       | F | U | T |
-  +---+---+---+---+---|
-  |   | F | F | F | F |
-  | A | U | F | U | U |
-  |   | T | F | U | T |
-  +---+---+---+---+---|
+  +--------+-----------|
+  |        |     B     |
+  | A ∧ B  |---+---+---|
+  |        | F | U | T |
+  |----+---+---+---+---|
+  |    | F | F | F | F |
+  | A  | U | F | U | U |
+  |    | T | F | U | T |
+  +----+---+---+---+---+
 
   OR(A, B) - Logical disjunction. Maximum value of (A, B)
-  +-------+-----------|
-  |       |     B     |
-  |       |---+---+---|
-  |       | F | U | T |
-  +---+---+---+---+---|
-  |   | F | F | U | T |
-  | A | U | U | U | T |
-  |   | T | T | T | T |
-  +---+---+---+---+---|
+  +--------+-----------+
+  |        |     B     |
+  | A ∨ B  |---+---+---|
+  |        | F | U | T |
+  |----+---+---+---+---|
+  |    | F | F | U | T |
+  | A  | U | U | U | T |
+  |    | T | T | T | T |
+  +----+---+---+---+---+
 
   IMP(A, B) - Logical implication. NOT(A) OR B
-  +-------+-----------|
-  |       |     B     |
-  |       |---+---+---|
-  |       | F | U | T |
-  +---+---+---+---+---|
-  |   | F | T | U | F |
-  | A | U | T | U | U |
-  |   | T | T | T | T |
-  +---+---+---+---+---|
+  +--------+-----------+
+  |        |     B     |
+  | A → B  |---+---+---|
+  |        | F | U | T |
+  |----+---+---+---+---|
+  |    | F | T | T | T |
+  | A  | U | U | U | T |
+  |    | T | F | U | T |
+  +----+---+---+---+---+
 
-  EQV(A, B) - Logical biconditional
-  +-------+-----------|
-  |       |     B     |
-  |       |---+---+---|
-  |       | F | U | T |
-  +---+---+---+---+---|
-  |   | F | T | U | F |
-  | A | U | U | U | U |
-  |   | T | F | U | T |
-  +---+---+---+---+---|
+  EQV(A, B) - Logical biconditional. OR(AND(A, B), AND(NOT(A), NOT(B)))
+  +--------+-----------+
+  |        |     B     |
+  | A ↔ B  |---+---+---|
+  |        | F | U | T |
+  |----+---+---+---+---|
+  |    | F | T | U | F |
+  | A  | U | U | U | U |
+  |    | T | F | U | T |
+  +----+---+---+---+---+
 
 */
 package ternary
@@ -90,19 +90,19 @@ var literals = map[Value]string{
 	TRUE:    "TRUE",
 }
 
-// Returns string representation of the Value
-func (v Value) String() string {
-	return literals[v]
+// Returns string representation of the value.
+func (value Value) String() string {
+	return literals[value]
 }
 
-// Returns integer representation of the Value
-func (v Value) Int() int64 {
-	return reflect.ValueOf(v).Int()
+// Returns integer representation of the value.
+func (value Value) Int() int64 {
+	return reflect.ValueOf(value).Int()
 }
 
-// Returns true if the Value is TRUE, otherwise returns false
-func (v Value) ParseBool() bool {
-	if v != TRUE {
+// Returns true if the value is TRUE, otherwise returns false.
+func (value Value) ParseBool() bool {
+	if value != TRUE {
 		return false
 	}
 	return true
@@ -149,7 +149,7 @@ func ConvertFromBool(b bool) Value {
 	return FALSE
 }
 
-// Check if two values are the same value, not logical equivalence.
+// Check if two values are the same value, not logical equality.
 func Equal(a Value, b Value) Value {
 	if a == b {
 		return TRUE
@@ -157,7 +157,7 @@ func Equal(a Value, b Value) Value {
 	return FALSE
 }
 
-// Returns the negation of a.
+// Returns the result of logical negation on a.
 func Not(a Value) Value {
 	switch a {
 	case FALSE:
@@ -168,7 +168,7 @@ func Not(a Value) Value {
 	return UNKNOWN
 }
 
-// Returns the logical conjunction of two values.
+// Returns the result of logical conjunction on two values.
 func And(a Value, b Value) Value {
 	switch {
 	case a == FALSE || b == FALSE:
@@ -179,7 +179,7 @@ func And(a Value, b Value) Value {
 	return TRUE
 }
 
-// Returns the logical disjunction of two values.
+// Returns the result of logical disjunction on two values.
 func Or(a Value, b Value) Value {
 	switch {
 	case a == TRUE || b == TRUE:
@@ -190,12 +190,12 @@ func Or(a Value, b Value) Value {
 	return FALSE
 }
 
-// Returns the logical implication of two values.
+// Returns the result of logical implication that is represented as "a implies b".
 func Imp(a Value, b Value) Value {
 	return Or(Not(a), b)
 }
 
-// Returns the logical biconditional of two values.
+// Returns the result of logical biconditional on two values.
 func Eqv(a Value, b Value) Value {
 	if a == UNKNOWN || b == UNKNOWN {
 		return UNKNOWN
@@ -203,7 +203,7 @@ func Eqv(a Value, b Value) Value {
 	return ConvertFromBool(a == b)
 }
 
-// Returns the logical conjunction of all values.
+// Returns the result of logical conjunction on all values.
 func All(values []Value) Value {
 	t := TRUE
 	if 0 < len(values) {
@@ -218,7 +218,7 @@ func All(values []Value) Value {
 	return t
 }
 
-// Returns the logical disjunction of all values.
+// Returns the result of logical disjunction on all values.
 func Any(values []Value) Value {
 	t := FALSE
 	if 0 < len(values) {
