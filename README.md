@@ -47,7 +47,7 @@ Three-valued logic based on Kleene's strong logic of indeterminacy.
   |    | T | T | T | T |
   +----+---+---+---+---+
 
-  IMP(A, B) - Logical implication. NOT(A) OR B
+  IMP(A, B) - Logical implication. OR(NOT(A), B)
   +--------+-----------+
   |        |     B     |
   | A → B  |---+---+---|
