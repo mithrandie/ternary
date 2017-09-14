@@ -167,7 +167,7 @@ func TestConvertFromBool(t *testing.T) {
 	}
 }
 
-var equivalentTests = []struct {
+var equalTests = []struct {
 	Value1 Value
 	Value2 Value
 	Result Value
@@ -184,9 +184,9 @@ var equivalentTests = []struct {
 	},
 }
 
-func TestEquivalent(t *testing.T) {
-	for _, test := range equivalentTests {
-		v := Equivalent(test.Value1, test.Value2)
+func TestEqual(t *testing.T) {
+	for _, test := range equalTests {
+		v := Equal(test.Value1, test.Value2)
 		if v != test.Result {
 			t.Errorf("ternary = %s, want %s for \"equal(%s, %s)\"", v, test.Result, test.Value1, test.Value2)
 		}
@@ -363,7 +363,38 @@ func TestImp(t *testing.T) {
 	for _, test := range impTests {
 		v := Imp(test.Value1, test.Value2)
 		if v != test.Result {
-			t.Errorf("ternary = %s, want %s for \"%s or %s\"", v, test.Result, test.Value1, test.Value2)
+			t.Errorf("ternary = %s, want %s for \"%s imp %s\"", v, test.Result, test.Value1, test.Value2)
+		}
+	}
+}
+
+var eqvTests = []struct {
+	Value1 Value
+	Value2 Value
+	Result Value
+}{
+	{
+		Value1: TRUE,
+		Value2: FALSE,
+		Result: FALSE,
+	},
+	{
+		Value1: TRUE,
+		Value2: UNKNOWN,
+		Result: UNKNOWN,
+	},
+	{
+		Value1: FALSE,
+		Value2: FALSE,
+		Result: TRUE,
+	},
+}
+
+func TestEqv(t *testing.T) {
+	for _, test := range eqvTests {
+		v := Eqv(test.Value1, test.Value2)
+		if v != test.Result {
+			t.Errorf("ternary = %s, want %s for \"%s eqv %s\"", v, test.Result, test.Value1, test.Value2)
 		}
 	}
 }

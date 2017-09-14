@@ -16,7 +16,7 @@ Three-valued logic based on Kleene's strong logic of indeterminacy.
 ## Truth tables
 
 ```
-  NOT(A) - Negative value of A
+  NOT(A) - Negation
   +---+----|
   | A | ¬A |
   +---+----|
@@ -56,5 +56,16 @@ Three-valued logic based on Kleene's strong logic of indeterminacy.
   |   | F | T | U | F |
   | A | U | T | U | U |
   |   | T | T | T | T |
+  +---+---+---+---+---|
+
+  EQV(A, B) - Equivalence
+  +-------+-----------|
+  |       |     B     |
+  +       +---+---+---|
+  |       | F | U | T |
+  +---+---+---+---+---|
+  |   | F | T | U | F |
+  | A | U | U | U | U |
+  |   | T | F | U | T |
   +---+---+---+---+---|
 ```
