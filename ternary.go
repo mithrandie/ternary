@@ -75,7 +75,7 @@ import (
 	"strings"
 )
 
-// Truth values
+// Value represents a truth value
 type Value int8
 
 const (
@@ -90,17 +90,17 @@ var literals = map[Value]string{
 	TRUE:    "TRUE",
 }
 
-// Returns string representation of the value.
+// String returns string representation of the value.
 func (value Value) String() string {
 	return literals[value]
 }
 
-// Returns integer representation of the value.
+// Int returns integer representation of the value.
 func (value Value) Int() int64 {
 	return reflect.ValueOf(value).Int()
 }
 
-// Returns true if the value is TRUE, otherwise returns false.
+// ParseBool returns true if the value is TRUE, otherwise returns false.
 func (value Value) ParseBool() bool {
 	if value != TRUE {
 		return false
@@ -108,26 +108,26 @@ func (value Value) ParseBool() bool {
 	return true
 }
 
-// Converts s to a ternary value.
-// If s is any of "false", "FALSE" and "-1", then it is converted to FALSE.
-// If s is any of "unknown", "UNKNOWN" and "0", then it is converted to UNKNOWN.
-// If s is any of "true", "TRUE" and "1", then it is converted to TRUE.
-// Otherwise returns an error.
+// ConvertFromString converts a string to a ternary value.
+// If the string is any of "false", "FALSE" and "-1", then it is converted to FALSE.
+// If the string is any of "unknown", "UNKNOWN" and "0", then it is converted to UNKNOWN.
+// If the string is any of "true", "TRUE" and "1", then it is converted to TRUE.
+// Otherwise, returns an error.
 func ConvertFromString(s string) (Value, error) {
 	switch strings.ToUpper(s) {
-	case "FALSE", "-1":
+	case literals[FALSE], "-1":
 		return FALSE, nil
-	case "TRUE", "1":
+	case literals[TRUE], "1":
 		return TRUE, nil
-	case "UNKNOWN", "0":
+	case literals[UNKNOWN], "0":
 		return UNKNOWN, nil
 	}
 	return UNKNOWN, errors.New(fmt.Sprintf("convert from %q: invalid value", s))
 }
 
-// Converts i to a ternary value.
-// Returns FALSE if i is -1, returns UNKNOWN if i is 0, returns TRUE if i is 1.
-// Otherwise returns an error.
+// ConvertFromInt64 converts an integer to a ternary value.
+// Returns FALSE if the integer is -1, returns UNKNOWN if it is 0, and returns TRUE if it is 1.
+// Otherwise, returns an error.
 func ConvertFromInt64(i int64) (Value, error) {
 	switch i {
 	case -1:
@@ -140,8 +140,8 @@ func ConvertFromInt64(i int64) (Value, error) {
 	return UNKNOWN, errors.New(fmt.Sprintf("convert from %d: invalid value", i))
 }
 
-// Converts b to a ternary value.
-// Returns FALSE if i is false, returns TRUE if i is true.
+// ConvertFromBool converts a boolean to a ternary value.
+// Returns FALSE if the boolean is false, returns TRUE if it is true.
 func ConvertFromBool(b bool) Value {
 	if b {
 		return TRUE
@@ -149,67 +149,46 @@ func ConvertFromBool(b bool) Value {
 	return FALSE
 }
 
-// Check if two values are the same value, not logical equality.
+// Equal checks if two values are the same value, not logical equality.
 func Equal(a Value, b Value) Value {
-	if a == b {
-		return TRUE
-	}
-	return FALSE
+	return ConvertFromBool(a == b)
 }
 
-// Returns the result of logical negation on a.
+// Not returns the result of logical negation for a value.
 func Not(a Value) Value {
-	switch a {
-	case FALSE:
-		return TRUE
-	case TRUE:
-		return FALSE
-	}
-	return UNKNOWN
+	return a * -1
 }
 
-// Returns the result of logical conjunction on two values.
+// And returns the result of logical conjunction for two values.
 func And(a Value, b Value) Value {
-	switch {
-	case a == FALSE || b == FALSE:
-		return FALSE
-	case a == UNKNOWN || b == UNKNOWN:
-		return UNKNOWN
+	if a < b {
+		return a
 	}
-	return TRUE
+	return b
 }
 
-// Returns the result of logical disjunction on two values.
+// Or returns the result of logical disjunction for two values.
 func Or(a Value, b Value) Value {
-	switch {
-	case a == TRUE || b == TRUE:
-		return TRUE
-	case a == UNKNOWN || b == UNKNOWN:
-		return UNKNOWN
+	if a > b {
+		return a
 	}
-	return FALSE
+	return b
 }
 
-// Returns the result of logical implication that is represented as "a implies b".
+// Imp returns the result of logical implication that is represented as "a implies b".
 func Imp(a Value, b Value) Value {
 	return Or(Not(a), b)
 }
 
-// Returns the result of logical biconditional on two values.
+// Eqv returns the result of logical biconditional for two values.
 func Eqv(a Value, b Value) Value {
-	if a == UNKNOWN || b == UNKNOWN {
-		return UNKNOWN
-	}
-	return ConvertFromBool(a == b)
+	return a * b
 }
 
-// Returns the result of logical conjunction on all values.
+// All returns the result of logical conjunction on all values.
 func All(values []Value) Value {
 	t := TRUE
-	if 0 < len(values) {
-		t = values[0]
-	}
-	for i := 1; i < len(values); i++ {
+	for i := 0; i < len(values); i++ {
 		t = And(t, values[i])
 		if t == FALSE {
 			return FALSE
@@ -218,13 +197,10 @@ func All(values []Value) Value {
 	return t
 }
 
-// Returns the result of logical disjunction on all values.
+// Any returns the result of logical disjunction on all values.
 func Any(values []Value) Value {
 	t := FALSE
-	if 0 < len(values) {
-		t = values[0]
-	}
-	for i := 1; i < len(values); i++ {
+	for i := 0; i < len(values); i++ {
 		t = Or(t, values[i])
 		if t == TRUE {
 			return TRUE
