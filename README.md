@@ -2,7 +2,7 @@
 
 Three-valued logic based on Kleene's strong logic of indeterminacy.
 
-[![Testing](https://github.com/mithrandie/ternary/actions/workflows/testing.yml/badge.svg?branch=master)](https://github.com/mithrandie/ternary/actions/workflows/testing.yml)
+[![Testing](https://github.com/mithrandie/ternary/actions/workflows/testing.yml/badge.svg)](https://github.com/mithrandie/ternary/actions/workflows/testing.yml)
 [![GoDoc](https://godoc.org/github.com/mithrandie/ternary?status.svg)](http://godoc.org/github.com/mithrandie/ternary)
 [![License: MIT](https://img.shields.io/badge/License-MIT-lightgrey.svg)](https://opensource.org/licenses/MIT)
 
